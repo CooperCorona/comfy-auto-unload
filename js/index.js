@@ -1,28 +1,93 @@
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
-import { $el } from "../../scripts/ui.js";
-
 app.registerExtension({
     name: "Comfy.AutoUnload",
-    init() {
-        $el("style", {
-            parent: document.head,
-        });
-    },
-    async setup() {
-        function showForm() {
-            console.log("showing form");
+    commands: [
+        {
+            id: "setUnload30Seconds",
+            label: "30 Seconds",
+            function: async () => {
+                try {
+                    const response = await api.fetchApi("/unload_time_remaining", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ "time_remaining": 30 })
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to set unload time");
+                    }
+                } catch (error) {
+                    alert("Error setting unload time: " + error.message);
+                }
+            }
+        },
+        {
+            id: "setUnload5Minutes",
+            label: "5 Minutes",
+            function: async () => {
+                try {
+                    const response = await api.fetchApi("/unload_time_remaining", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ "time_remaining": 300 })
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to set unload time");
+                    }
+                } catch (error) {
+                    alert("Error setting unload time: " + error.message);
+                }
+            }
+        },
+        {
+            id: "setUnload10Minutes",
+            label: "10 Minutes",
+            function: async () => {
+                try {
+                    const response = await api.fetchApi("/unload_time_remaining", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ "time_remaining": 600 })
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to set unload time");
+                    }
+                } catch (error) {
+                    alert("Error setting unload time: " + error.message);
+                }
+            }
+        },
+        {
+            id: "setUnload30Minutes",
+            label: "30 Minutes",
+            function: async () => {
+                try {
+                    const response = await api.fetchApi("/unload_time_remaining", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ "time_remaining": 1800 })
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to set unload time");
+                    }
+                } catch (error) {
+                    alert("Error setting unload time: " + error.message);
+                }
+            }
         }
-        const menu = document.querySelector(".comfy-menu");
-        const separator = document.createElement("hr");
-
-        separator.style.margin = "20px 0";
-        separator.style.width = "100%";
-        menu.append(separator);
-
-		const showFormButton = document.createElement("button");
-		showFormButton.textContent = "Autounload";
-		showFormButton.onclick = () => showForm();
-		menu.append(showFormButton);
-    }
+    ],
+    menuCommands: [
+        {
+            path: ["Extensions", "AutoUnload"],
+            commands: ["setUnload30Seconds", "setUnload5Minutes", "setUnload10Minutes", "setUnload30Minutes"]
+        }
+    ]
 });
