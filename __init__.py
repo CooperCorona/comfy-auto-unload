@@ -67,6 +67,7 @@ class UnloadTimeTracker:
         self.timer_handle = asyncio.create_task(check_and_free())
 
     def free(self):
+        print("comfy-auto-unload freeing memory")
         request = aiohttp.web.Request(
             headers={},
             payload=None,
@@ -76,6 +77,7 @@ class UnloadTimeTracker:
         )
         request.json = lambda: {"unload_models": True, "free_memory": True}
         PromptServer.instance.post_free(request)
+        print("comfy-auto-unload freed memory")
         
 tracker = UnloadTimeTracker()
 

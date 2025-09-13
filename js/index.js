@@ -4,6 +4,26 @@ app.registerExtension({
     name: "Comfy.AutoUnload",
     commands: [
         {
+            id: "setUnload30Seconds",
+            label: "30 Seconds",
+            function: async () => {
+                try {
+                    const response = await api.fetchApi("/unload_time_remaining", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ "time_remaining": 30 })
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to set unload time");
+                    }
+                } catch (error) {
+                    alert("Error setting unload time: " + error.message);
+                }
+            }
+        },
+        {
             id: "setUnload5Minutes",
             label: "5 Minutes",
             function: async () => {
@@ -67,7 +87,7 @@ app.registerExtension({
     menuCommands: [
         {
             path: ["Extensions", "AutoUnload"],
-            commands: ["setUnload5Minutes", "setUnload10Minutes", "setUnload30Minutes"]
+            commands: ["setUnload30Seconds", "setUnload5Minutes", "setUnload10Minutes", "setUnload30Minutes"]
         }
     ]
 });
