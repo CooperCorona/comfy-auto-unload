@@ -19,6 +19,9 @@ class UnloadTimeTracker:
         PromptServer.instance.routes.get("/unload_time_remaining")(
             self.unload_time_remaining
         )
+        PromptServer.instance.routes.post("/unload_time_remaining")(
+            self.set_unload_time_remaining
+        )
 
     @property
     def time_remaining(self):
@@ -30,11 +33,9 @@ class UnloadTimeTracker:
             time_remaining = max(0, self.unload_delay_seconds - elapsed_seconds)
         return time_remaining
 
-    @PromptServer.instance.routes.get("/unload_time_remaining")
     async def unload_time_remaining(self, request):
         return aiohttp.web.json_response({"time_remaining": self.time_remaining})
 
-    @PromptServer.instance.routes.post("/unload_time_remaining")
     async def set_unload_time_remaining(self, request):
         try:
             data = await request.json()
